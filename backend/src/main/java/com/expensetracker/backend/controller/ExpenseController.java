@@ -5,7 +5,7 @@ import com.expensetracker.backend.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -24,7 +24,7 @@ public class ExpenseController {
                 request.getTitle(),
                 request.getAmount(),
                 request.getCategory(),
-                request.getDate() != null ? request.getDate() : Instant.now()
+                request.getDate() != null ? request.getDate() : LocalDateTime.now()
         );
         expenseService.saveExpense(expense);
         return ResponseEntity.ok("Expense saved!");
