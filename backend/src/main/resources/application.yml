@@ -1,0 +1,10 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.ca-central-1.amazonaws.com/ca-central-1_YgSh7EWsJ
+
+logging:
+  level:
+    org.springframework.security: DEBUG
