@@ -6,6 +6,9 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ExpenseService {
 
@@ -17,5 +20,13 @@ public class ExpenseService {
 
     public void saveExpense(Expense expense) {
         expenseTable.putItem(expense);
+    }
+
+    public List<Expense> getExpensesByUserId(String userId) {
+        return expenseTable.scan()
+            .items()
+            .stream()
+            .filter(expense -> expense.getUserId().equals(userId))
+            .collect(Collectors.toList());
     }
 }
