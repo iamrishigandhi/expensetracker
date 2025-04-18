@@ -1,11 +1,16 @@
 package com.expensetracker.backend.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.expensetracker.backend.model.Expense;
 import com.expensetracker.backend.service.ExpenseService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -17,16 +22,10 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> createExpense(@RequestBody Expense request) {
-        Expense expense = new Expense(
-                request.getUserId(),
-                request.getTitle(),
-                request.getAmount(),
-                request.getCategory(),
-                request.getDate() != null ? request.getDate() : LocalDateTime.now()
-        );
-        expenseService.saveExpense(expense);
-        return ResponseEntity.ok("Expense saved!");
+    @GetMapping
+    public ResponseEntity<List<Expense>> getExpenses(@AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        List<Expense> expenses = expenseService.getExpensesByUserId(userId);
+        return ResponseEntity.ok(expenses);
     }
 }
